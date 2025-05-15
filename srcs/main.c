@@ -6,17 +6,17 @@
 /*   By: abarahho <abarahho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:28:00 by abarahho          #+#    #+#             */
-/*   Updated: 2025/05/07 11:09:38 by abarahho         ###   ########.fr       */
+/*   Updated: 2025/05/15 15:36:05 by abarahho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3D.h"
+#include "parsing.h"
 
 void	free_data_map(t_data_map *data)
 {
-	t_mapbuffer *current;
-	t_mapbuffer *next;
+	int	i;
 
+	i = 0;
 	if (!data)
 		return ;
 	if (data->textures.north)
@@ -39,33 +39,21 @@ void	free_data_map(t_data_map *data)
 		free(data->textures.east);
 		data->textures.east = NULL;
 	}
-	current = data->map;
-	while (current)
+	if (data->map.map)
 	{
-		next = current->next;
-		if (current->line)
-		{
-			free(current->line);
-			current->line = NULL;
-		}
-		free(current);
-		current = next;
+		free_array(data->map.map);
 	}
-	data->map = NULL;
-	data->floor = 0;
-	data->ceiling = 0;
-	data->inited = false;
 }
 
 int	main(int ac, char **av)
 {
-	t_data_map	map;
+	t_data_map	data_map;
 
-	map.inited = false;
+	data_map.inited = false;
 	if (ac != 2)
 		return(ft_dprintf(2, "./cub3D [*.cub]\n"));
-	map = parsing(av[1]);
-	print_data_map(&map);
-	free_data_map(&map);
+	data_map = parsing(av[1]);
+	print_data_map(&data_map);
+	free_data_map(&data_map);
 	return (0);
 }

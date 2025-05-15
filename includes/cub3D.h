@@ -6,7 +6,7 @@
 /*   By: abarahho <abarahho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:29:31 by abarahho          #+#    #+#             */
-/*   Updated: 2025/05/07 11:09:48 by abarahho         ###   ########.fr       */
+/*   Updated: 2025/05/15 18:11:36 by abarahho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,47 +15,42 @@
 
 # include "mlx.h"
 # include "libft.h"
-# include "parsing.h"
 
 # define WIDTH 320
 # define HEIGHT 200
- 
-typedef	struct s_player
+
+typedef    struct s_player
 {
 	float	x;
 	float	y;
 	float	look_angle;
-}			t_player;
+}	t_player;
 
-typedef struct	s_img
+typedef    struct s_map
 {
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-}			t_img;
+	int		width;
+	int		height;
+	char	**map;
+}	t_map;
 
-typedef	struct s_map
+typedef struct s_textures
 {
-	int			width;
-	int			height;
-	int			*map;
-}			t_map;
+	char    *north;
+	char    *south;
+	char    *west;
+	char    *east;
+}	t_textures;
 
-typedef struct s_cub
+typedef struct s_data_map
 {
-	void			*mlx;
-	void			*mlx_win;
-	t_img			img;
+	t_textures		textures;
+	unsigned int	floor;
+	unsigned int	ceiling;
+	t_player		player;
 	t_map			map;
-}			t_cub;
+	bool			inited;
+}	t_data_map;
 
-
-int			init_screen(t_cub *cub);
-void		destroy_screen(t_cub *cub);
 t_data_map	parsing(char *str);
-void		free_data_map(t_data_map *data);
-
 
 #endif

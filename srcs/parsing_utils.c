@@ -6,11 +6,11 @@
 /*   By: abarahho <abarahho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 13:52:01 by abarahho          #+#    #+#             */
-/*   Updated: 2025/05/02 16:06:56 by abarahho         ###   ########.fr       */
+/*   Updated: 2025/05/15 18:14:34 by abarahho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3D.h"
+#include "parsing.h"
 
 int	array_len(char **array)
 {
@@ -50,12 +50,28 @@ bool	is_valid_filename(char *str)
 	return (!ft_strcmp(str, ".cub"));
 }
 
-// void	free_data(t_data_map *data)
-// {
-	
-// }
+void	free_remaining_lines(int fd)
+{
+	char	*line;
 
-// int	validate_data(t_data_map *data)
-// {
-	
-// }
+	while ((line = get_next_line(fd)) != NULL)
+		free(line);
+}
+
+void	error_handling(t_error CODE, char *line)
+{
+	if (CODE == TEXT_FAIL)
+		ft_dprintf(2, "Error:\nProblem with the texture at line :%s\n", line);
+	if (CODE == COL_FAIL)
+		ft_dprintf(2, "Error:\nProblem with color at line :%s\n", line);
+	if (CODE == LINE_FAIL)
+		ft_dprintf(2, "Error:\nUnknow value at line :%s\n", line);
+	if (CODE == PLAYER_FOUND)
+		ft_dprintf(2, "Error:\nSecond player found on the map at line :%s\n", line);
+	if (CODE == INCOR_CHAR)
+		ft_dprintf(2, "Error:\nIncorect char at line :%s\n", line);
+	if (CODE == EMPTY_LINE)
+		ft_dprintf(2, "Error:\nEmpty line in the map\n");
+	if (CODE == INCOR_MAP)
+		ft_dprintf(2, "Error:\nIncorect map\n");
+}
