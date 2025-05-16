@@ -21,7 +21,6 @@ SRCS := $(SRCS_DIR)/main.c \
 		$(SRCS_DIR)/parse_textures.c \
 		$(SRCS_DIR)/parse_map.c \
 		$(SRCS_DIR)/parsing_utils.c \
-		$(SRCS_DIR)/print.c \
 		$(SRCS_DIR)/parsing.c \
 		$(SRCS_DIR)/flood_fill.c
 OBJS = $(SRCS:.c=.o)

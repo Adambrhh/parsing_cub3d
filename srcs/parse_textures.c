@@ -6,7 +6,7 @@
 /*   By: abarahho <abarahho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:02:59 by abarahho          #+#    #+#             */
-/*   Updated: 2025/05/15 15:46:53 by abarahho         ###   ########.fr       */
+/*   Updated: 2025/05/16 10:35:11 by abarahho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static bool	set_texture(char **texture, char *line)
 		return (false);
 	*texture = ft_strtrim(line + 3, "\n");
 	if (!*texture || !check_texture_file(*texture))
-		return (free(*texture), false);
+		return (false);
 	return (true);
 }
 

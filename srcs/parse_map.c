@@ -6,7 +6,7 @@
 /*   By: abarahho <abarahho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:02:59 by abarahho          #+#    #+#             */
-/*   Updated: 2025/05/15 17:03:05 by abarahho         ###   ########.fr       */
+/*   Updated: 2025/05/16 11:43:14 by abarahho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static bool	is_map_line(char *line, bool *player)
 	return (true);
 }
 
-void	buffer_map_line(t_mapbuffer **mapline, char *line)
+static void	buffer_map_line(t_mapbuffer **mapline, char *line)
 {
 	t_mapbuffer	*new;
 	t_mapbuffer	*current;
@@ -89,7 +89,23 @@ static void	copy_mapbuffer_to_array(t_data_map *data_map, t_mapbuffer **mapline)
 	data_map->map.map[i] = NULL;
 }
 
-void	parse_map(char *line, int fd, t_data_map *data_map)
+static void	free_mapbuffer(t_mapbuffer *mapline)
+{
+	t_mapbuffer	*current;
+	t_mapbuffer	*next;
+
+	current = mapline;
+	while (current)
+	{
+		next = current->next;
+		if (current->mapline)
+			free(current->mapline);
+		free(current);
+		current = next;
+	}
+}
+
+bool	parse_map(char *line, int fd, t_data_map *data_map)
 {
 	bool			player;
 	t_mapbuffer		*mapline;
@@ -100,10 +116,7 @@ void	parse_map(char *line, int fd, t_data_map *data_map)
 	while (line)
 	{
 		if (!is_map_line(line, &player))
-		{
-			free(line);
-			return ;
-		}
+			return (free(line), free_mapbuffer(mapline), false);
 		buffer_map_line(&mapline, line);
 		line_length = (int)(ft_strlen(line) - 1);
 		if (data_map->map.width < line_length)
@@ -113,4 +126,5 @@ void	parse_map(char *line, int fd, t_data_map *data_map)
 	}
 	data_map->map.height = ft_lstsize((t_list *)mapline);
 	copy_mapbuffer_to_array(data_map, &mapline);
+	return (true);
 }

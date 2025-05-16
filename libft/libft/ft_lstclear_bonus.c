@@ -6,16 +6,16 @@
 /*   By: abarahho <abarahho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 14:35:44 by abarahho          #+#    #+#             */
-/*   Updated: 2025/02/18 10:41:43 by abarahho         ###   ########.fr       */
+/*   Updated: 2025/05/16 09:32:24 by abarahho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/libft.h"
 
-// void	del(void *content)
-// {
-// 	free(content);
-// }
+void	del(void *content)
+{
+	free(content);
+}
 
 void	ft_lstclear(t_list **lst, void (*del)(void *))
 {

@@ -6,7 +6,7 @@
 /*   By: abarahho <abarahho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 13:52:01 by abarahho          #+#    #+#             */
-/*   Updated: 2025/05/15 18:21:28 by abarahho         ###   ########.fr       */
+/*   Updated: 2025/05/16 14:24:44 by abarahho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ int	check_file(char *str)
 {
 	int			fd;
 
-	fd = open(str, O_RDONLY);
 	if (!is_valid_filename(str))
 	{
 		(ft_dprintf(2, "Error: Invalid file extension %s\n", str));
 		return (-1);
 	}
+	fd = open(str, O_RDONLY);
 	if (fd < 0)
 	{
 		(ft_dprintf(2, "Error: Could not open this file %s\n, str"));
@@ -74,22 +74,24 @@ t_data_map	parsing(char *str)
 	int			fd;
 	char		*line;
 
-	line = NULL;
 	ft_bzero(&data_map, sizeof(t_data_map));
+	line = NULL;
 	fd = check_file(str);
-	if (fd == -1)
+	if (fd < 0)
 		return (data_map);
 	line = get_next_line(fd);
+	if (!line)
+	{
+		error_handling(EMPTY_FILE, NULL);
+		return (close(fd), data_map);
+	}
 	parse_textures_and_colors(fd, &line, &data_map);
 	if (!is_header(&data_map))
 		return (free_remaining_lines(fd), close(fd), data_map);
-	parse_map(line, fd, &data_map);
-	if (!flood_fill(&data_map))
-	{
-		error_handling(INCOR_MAP, NULL);
+	if (!parse_map(line, fd, &data_map))
 		return (free_remaining_lines(fd), close(fd), data_map);
-	}
-	free_remaining_lines(fd);
+	if (!flood_fill(&data_map))
+		return (close(fd), data_map);
 	close(fd);
 	data_map.inited = true;
 	return (data_map);

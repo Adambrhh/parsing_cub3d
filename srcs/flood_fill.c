@@ -6,7 +6,7 @@
 /*   By: abarahho <abarahho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 17:31:16 by abarahho          #+#    #+#             */
-/*   Updated: 2025/05/15 18:26:11 by abarahho         ###   ########.fr       */
+/*   Updated: 2025/05/16 11:34:14 by abarahho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,15 @@ static void	find_player(t_data_map *data_map)
 		x = 0;
 		while (data_map->map.map[y][x])
 		{
-			if (data_map->map.map[y][x] == 'N' || data_map->map.map[y][x] == 'S'
-				|| data_map->map.map[y][x] == 'W' || data_map->map.map[y][x] == 'E')
+			if (data_map->map.map[y][x] == 'N'
+				|| data_map->map.map[y][x] == 'S'
+				|| data_map->map.map[y][x] == 'W'
+				|| data_map->map.map[y][x] == 'E')
 			{
 				data_map->player.x = (float)x;
 				data_map->player.y = (float)y;
-				player_angle(data_map->map.map[y][x], &data_map->player.look_angle);
+				player_angle(data_map->map.map[y][x],
+					&data_map->player.look_angle);
 				return ;
 			}
 			x++;
@@ -51,7 +54,8 @@ static void	find_player(t_data_map *data_map)
 
 static int	flood_fill_recursive(t_data_map *data_map, int x, int y)
 {
-	if (y < 0 || y >= data_map->map.height || x < 0 || x >= (int)ft_strlen(data_map->map.map[y]))
+	if (y < 0 || y >= data_map->map.height || x < 0
+		|| x >= (int)ft_strlen(data_map->map.map[y]))
 		return (0);
 	if (data_map->map.map[y][x] == '1' || data_map->map.map[y][x] == '2')
 		return (1);
@@ -67,11 +71,13 @@ static int	flood_fill_recursive(t_data_map *data_map, int x, int y)
 	return (1);
 }
 
-int	flood_fill(t_data_map *data_map)
+bool	flood_fill(t_data_map *data_map)
 {
-    find_player(data_map);
-    if (data_map->player.x == -1 || data_map->player.y == -1)
-        return (0);
-    return (flood_fill_recursive(data_map, data_map->player.x,
-            data_map->player.y));
+	find_player(data_map);
+	if (data_map->player.x == -1 || data_map->player.y == -1)
+		return (false);
+	if (!flood_fill_recursive(data_map, data_map->player.x,
+			data_map->player.y))
+		return (error_handling(INCOR_MAP, NULL), false);
+	return (true);
 }

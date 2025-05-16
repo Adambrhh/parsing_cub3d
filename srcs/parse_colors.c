@@ -6,7 +6,7 @@
 /*   By: abarahho <abarahho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:02:59 by abarahho          #+#    #+#             */
-/*   Updated: 2025/05/15 15:45:19 by abarahho         ###   ########.fr       */
+/*   Updated: 2025/05/16 14:18:16 by abarahho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,22 +25,26 @@ unsigned int	convert_rgb_to_uint(unsigned int *rgb_array)
 
 static unsigned int	is_valid_number(char *str)
 {
-	int				i;
-	unsigned int	num;
+	int		i;
+	long	num;
 
 	i = 0;
 	if (!str || str[0] == '\0')
+		return (666);
+	if (str[i] == '-' || str[i] == '+')
+		i++;
+	if (!str[i])
 		return (666);
 	while (str[i])
 	{
 		if (!ft_isdigit(str[i]))
 			return (666);
+		if (i > 12)
+			return (666);
 		i++;
 	}
-	if (i > 3)
-		return (666);
-	num = ft_atoi(str);
-	if (num > 255)
+	num = ft_atol(str);
+	if (num > 255 || num < 0)
 		return (666);
 	return (num);
 }
